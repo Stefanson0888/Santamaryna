@@ -250,3 +250,57 @@ video {
   display: block;
   height: auto;
 }
+
+.portfolio-group {
+  margin-top: 72px;
+  padding-top: 8px;
+}
+
+.section-heading {
+  margin-bottom: 24px;
+}
+
+.section-heading h2 {
+  text-align: left;
+  margin-bottom: 8px;
+}
+
+.section-heading p {
+  margin: 0;
+  color: #666666;
+  font-size: 15px;
+  max-width: 760px;
+}
+
+.item {
+  padding: 0;
+  overflow: hidden;
+  background: #f7f7f7;
+}
+
+.item a {
+  display: block;
+}
+
+.item img,
+.item video {
+  width: 100%;
+  display: block;
+  height: 340px;
+  object-fit: cover;
+}
+
+.video-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (max-width: 900px) {
+  .video-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .item img,
+  .item video {
+    height: auto;
+  }
+}
