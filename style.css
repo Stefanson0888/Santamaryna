@@ -304,3 +304,9 @@ video {
     height: auto;
   }
 }
+
+.portfolio-preview .item p {
+  margin: 10px 0 0;
+  font-size: 14px;
+  text-align: center;
+}
