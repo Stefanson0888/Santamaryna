@@ -244,3 +244,9 @@ footer {
 .footer-links a:hover {
   color: #000;
 }
+
+video {
+  width: 100%;
+  display: block;
+  height: auto;
+}
