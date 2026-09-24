@@ -1,0 +1,20 @@
+export default {
+  name: 'siteSettings', title: 'Site Settings', type: 'document',
+  __experimental_actions: ['update', 'publish'],
+  fields: [
+    { name: 'heroTitleEn', title: 'Hero Title (EN)', type: 'string',
+      description: 'Wrap italic word in **, e.g. "Visuals that **speak** for your brand"' },
+    { name: 'heroTitleUa', title: 'Hero Title (UA)', type: 'string' },
+    { name: 'heroSubEn', title: 'Hero Subtitle (EN)', type: 'text', rows: 3 },
+    { name: 'heroSubUa', title: 'Hero Subtitle (UA)', type: 'text', rows: 3 },
+    { name: 'heroImages', title: 'Hero Images (3 photos)', type: 'array',
+      of: [{ type: 'image', options: { hotspot: true },
+             fields: [{ name: 'alt', type: 'string', title: 'Alt text' }] }],
+      validation: (R: any) => R.max(3) },
+    { name: 'email', title: 'Contact Email', type: 'string' },
+    { name: 'instagram', title: 'Instagram (without @)', type: 'string' },
+    { name: 'metaDescriptionEn', title: 'SEO Description (EN)', type: 'text', rows: 2 },
+    { name: 'metaDescriptionUa', title: 'SEO Description (UA)', type: 'text', rows: 2 },
+  ],
+  preview: { prepare: () => ({ title: 'Site Settings' }) },
+}

@@ -1,0 +1,33 @@
+export default {
+  name: 'greeting', title: 'Video Greeting', type: 'document',
+  fields: [
+    { name: 'order', title: 'Order', type: 'number' },
+    { name: 'titleEn', title: 'Title (EN)', type: 'string' },
+    { name: 'titleUa', title: 'Title (UA)', type: 'string' },
+    { name: 'descEn', title: 'Description (EN)', type: 'text', rows: 3 },
+    { name: 'descUa', title: 'Description (UA)', type: 'text', rows: 3 },
+    { name: 'price', title: 'Price (number)', type: 'number' },
+    { name: 'currency', title: 'Currency', type: 'string', initialValue: '$',
+      options: { list: ['$', '€', '₴'] } },
+    { name: 'badge', title: 'Badge (e.g. Most Popular)', type: 'string' },
+    { name: 'thumbColor', title: 'Thumbnail gradient (CSS)', type: 'string',
+      description: 'e.g. linear-gradient(135deg, #E8D9C0 0%, #D4C0A0 100%)' },
+    { name: 'fields', title: 'Order form fields', type: 'array',
+      of: [{ type: 'object', fields: [
+        { name: 'fieldKey', title: 'Key (no spaces)', type: 'string' },
+        { name: 'labelEn', title: 'Label (EN)', type: 'string' },
+        { name: 'labelUa', title: 'Label (UA)', type: 'string' },
+        { name: 'type', title: 'Field type', type: 'string',
+          options: { list: [
+            { title: 'Text', value: 'text' }, { title: 'Number', value: 'number' },
+            { title: 'Textarea', value: 'textarea' }, { title: 'Photo upload', value: 'photo' },
+          ], layout: 'radio' } },
+        { name: 'required', title: 'Required?', type: 'boolean', initialValue: true },
+      ], preview: { select: { title: 'labelEn', type: 'type' },
+        prepare: ({ title, type }: any) => ({ title, subtitle: type }) } }] },
+    { name: 'isActive', title: 'Show on site', type: 'boolean', initialValue: true },
+  ],
+  preview: { select: { title: 'titleEn', price: 'price' },
+    prepare: ({ title, price }: any) => ({ title, subtitle: `$${price}` }) },
+  orderings: [{ title: 'Order', name: 'orderAsc', by: [{ field: 'order', direction: 'asc' }] }],
+}

@@ -1,0 +1,26 @@
+export default {
+  name: 'portfolioItem', title: 'Portfolio Item', type: 'document',
+  fields: [
+    { name: 'order', title: 'Order', type: 'number' },
+    { name: 'titleEn', title: 'Title (EN)', type: 'string' },
+    { name: 'titleUa', title: 'Title (UA)', type: 'string' },
+    { name: 'category', title: 'Category', type: 'string',
+      options: { list: [
+        { title: 'AI Images', value: 'ai-images' },
+        { title: 'AI Video', value: 'ai-video' },
+        { title: 'Ads', value: 'ads' },
+        { title: 'Fashion', value: 'fashion' },
+      ], layout: 'radio' } },
+    { name: 'mediaType', title: 'Media Type', type: 'string',
+      options: { list: [{ title: 'Image', value: 'image' }, { title: 'Video URL', value: 'video' }], layout: 'radio' } },
+    { name: 'image', title: 'Image', type: 'image', options: { hotspot: true },
+      fields: [{ name: 'alt', type: 'string', title: 'Alt text' }],
+      hidden: ({ document }: any) => document?.mediaType === 'video' },
+    { name: 'videoUrl', title: 'Video URL', type: 'url',
+      hidden: ({ document }: any) => document?.mediaType !== 'video' },
+    { name: 'isActive', title: 'Show on site', type: 'boolean', initialValue: true },
+  ],
+  preview: { select: { title: 'titleEn', media: 'image', category: 'category' },
+    prepare: ({ title, media, category }: any) => ({ title: title || 'Untitled', subtitle: category, media }) },
+  orderings: [{ title: 'Manual order', name: 'orderAsc', by: [{ field: 'order', direction: 'asc' }] }],
+}
