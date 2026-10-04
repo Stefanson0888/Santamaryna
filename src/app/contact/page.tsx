@@ -1,16 +1,16 @@
 import SiteShell from '@/components/SiteShell'
-import HeroSection from '@/components/sections/HeroSection'
+import ContactSection from '@/components/sections/ContactSection'
 import { getSiteSettings } from '@/lib/queries'
 
 export const revalidate = 60
 
-export default async function HomePage() {
+export default async function ContactPage() {
   const settings = await getSiteSettings().catch(() => null)
 
   return (
     <SiteShell>
       <main>
-        <HeroSection settings={settings} />
+        <ContactSection settings={settings} />
       </main>
     </SiteShell>
   )

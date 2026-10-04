@@ -16,7 +16,8 @@ export async function getServices() {
 
 export async function getPortfolioItems() {
   return client.fetch(`*[_type == "portfolioItem" && isActive == true] | order(order asc){
-    _id, order, titleEn, titleUa, category, image{asset, alt}, videoUrl, mediaType
+    _id, order, titleEn, titleUa, slug, category, shortDescEn, shortDescUa,
+    image{asset, alt}, videoUrl, mediaType
   }`)
 }
 
@@ -31,4 +32,27 @@ export async function getHowItWorks() {
   return client.fetch(`*[_type == "howItWorksStep"] | order(order asc){
     _id, order, titleEn, titleUa, descEn, descUa
   }`)
+}
+
+export async function getPortfolioItemBySlug(slug: string) {
+  return client.fetch(
+    `*[_type == "portfolioItem" && slug.current == $slug && isActive == true][0]{
+      _id,
+      titleEn,
+      titleUa,
+      slug,
+      category,
+      shortDescEn,
+      shortDescUa,
+      descriptionEn,
+      descriptionUa,
+      image{asset, alt},
+      videoUrl,
+      mediaType,
+      gallery[]{asset, alt},
+      tools,
+      year
+    }`,
+    { slug }
+  )
 }
