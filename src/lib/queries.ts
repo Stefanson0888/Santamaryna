@@ -23,7 +23,7 @@ export async function getPortfolioItems() {
 
 export async function getGreetings() {
   return client.fetch(`*[_type == "greeting" && isActive == true] | order(order asc){
-    _id, order, titleEn, titleUa, descEn, descUa, price, currency, badge, thumbColor,
+    _id, order, titleEn, titleUa, slug, descEn, descUa, price, currency, badge, thumbColor,
     fields[]{fieldKey, labelEn, labelUa, type, required}
   }`)
 }
@@ -52,6 +52,33 @@ export async function getPortfolioItemBySlug(slug: string) {
       gallery[]{asset, alt},
       tools,
       year
+    }`,
+    { slug }
+  )
+}
+
+export async function getGreetingBySlug(slug: string) {
+  return client.fetch(
+    `*[_type == "greeting" && slug.current == $slug && isActive == true][0]{
+      _id,
+      order,
+      titleEn,
+      titleUa,
+      slug,
+      automationKey,
+      descEn,
+      descUa,
+      price,
+      currency,
+      badge,
+      thumbColor,
+      fields[]{
+        fieldKey,
+        labelEn,
+        labelUa,
+        type,
+        required
+      }
     }`,
     { slug }
   )

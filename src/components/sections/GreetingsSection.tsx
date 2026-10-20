@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useLang, t } from '@/lib/lang'
 
 export default function GreetingsSection({
@@ -171,9 +172,12 @@ export default function GreetingsSection({
                     </span>
                   </div>
 
-                  <button className="w-full bg-charcoal px-4 py-2.5 font-jost text-[0.65rem] tracking-[0.15em] uppercase text-warm-white transition-colors hover:bg-accent sm:w-auto">
+                  <Link
+                    href={g.slug?.current ? `/video-greetings/${g.slug.current}` : '/video-greetings'}
+                    className="w-full bg-charcoal px-4 py-2.5 text-center font-jost text-[0.65rem] tracking-[0.15em] uppercase text-warm-white transition-colors hover:bg-accent sm:w-auto"
+                  >
                     {lang === 'en' ? 'Order →' : 'Замовити →'}
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
