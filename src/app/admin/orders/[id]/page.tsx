@@ -44,6 +44,17 @@ export default async function OrderDetailPage({
     })
   )
 
+  let videoDownloadUrl: string | null = null
+
+  if (order.video_url) {
+    const { data } = await supabaseAdmin.storage
+      .from('greeting-renders')
+      .createSignedUrl(String(order.video_url), 60 * 60)
+
+    videoDownloadUrl = data?.signedUrl || null
+  }
+
+
   const importantPeople = Array.isArray(personalization.importantPeople)
     ? personalization.importantPeople
     : []
@@ -141,6 +152,18 @@ export default async function OrderDetailPage({
               <Info label="Render" value={order.render_status} />
               <Info label="Automation" value={order.automation_key} />
               <Info label="Order ID" value={order.id} />
+
+              {videoDownloadUrl && (
+                <a
+                  href={videoDownloadUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-block bg-[#1A1814] px-5 py-3 text-center text-[0.68rem] uppercase tracking-[0.14em] text-[#FDFCFA]"
+                >
+                  Download video
+                </a>
+              )}
+
             </div>
           </section>
         </div>

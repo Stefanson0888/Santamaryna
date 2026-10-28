@@ -3,3 +3,9 @@ node_modules/
 .env.local
 .env*.local
 .DS_Store
+
+# Local video rendering
+renders/
+tmp/
+test/
+templates/
