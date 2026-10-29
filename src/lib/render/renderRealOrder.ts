@@ -11,6 +11,10 @@ const execFileAsync = promisify(execFile)
 
 const FFMPEG_PATH =
   process.env.FFMPEG_PATH || '/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg'
+
+const RENDER_FONT_PATH =
+  process.env.RENDER_FONT_PATH ||
+  '/System/Library/Fonts/Supplemental/Arial.ttf'
 const MEDIA_BUCKET = 'greeting-media'
 const RENDERS_BUCKET = 'greeting-renders'
 const TEMPLATES_BUCKET = 'greeting-templates'
@@ -161,7 +165,7 @@ async function renderOrder(orderId: string) {
 
       filterParts.push(
         `${currentVideoLabel}drawtext=` +
-          `fontfile=/System/Library/Fonts/Supplemental/Arial.ttf:` +
+          `fontfile=${RENDER_FONT_PATH}:` +
           `text='${escaped}':` +
           `fontcolor=white:` +
           `fontsize=54:` +
