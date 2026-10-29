@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "render:queue": "tsx src/lib/render/processQueuedOrders.ts"
+    "render:queue": "tsx src/lib/render/processQueuedOrders.ts",
+    "render:worker": "tsx src/lib/render/renderWorker.ts"
   },
   "dependencies": {
     "@sanity/image-url": "^1.0.2",

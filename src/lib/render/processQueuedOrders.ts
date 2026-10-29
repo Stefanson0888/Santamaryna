@@ -6,7 +6,7 @@ loadEnvConfig(process.cwd())
 
 const execFileAsync = promisify(execFile)
 
-async function processQueuedOrders(limit = 1) {
+export async function processQueuedOrders(limit = 1) {
   const { supabaseAdmin } = await import('../supabaseAdmin')
 
   const { data: orders, error } = await supabaseAdmin
@@ -66,9 +66,11 @@ async function processQueuedOrders(limit = 1) {
   }
 }
 
-const limitArg = Number(process.argv[2] || '1')
+if (process.argv[1]?.endsWith('processQueuedOrders.ts')) {
+  const limitArg = Number(process.argv[2] || '1')
 
-processQueuedOrders(limitArg).catch((error) => {
-  console.error(error)
-  process.exit(1)
-})
+  processQueuedOrders(limitArg).catch((error) => {
+    console.error(error)
+    process.exit(1)
+  })
+}
