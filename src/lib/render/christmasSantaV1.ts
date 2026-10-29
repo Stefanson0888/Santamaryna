@@ -10,6 +10,7 @@ export const christmasSantaV1: RenderTemplate = {
   width: 1920,
   height: 1080,
   fps: 30,
+  duration: 35,
 
   layers: [
     {

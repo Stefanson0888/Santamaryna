@@ -32,6 +32,7 @@ export function buildRenderPlan(order: OrderRenderData) {
     width: template.width,
     height: template.height,
     fps: template.fps,
+    duration: template.duration,
     layers,
   }
 }

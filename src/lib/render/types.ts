@@ -41,6 +41,7 @@ export type RenderTemplate = {
   width: number
   height: number
   fps: number
+  duration: number
 
   layers: RenderLayer[]
 }

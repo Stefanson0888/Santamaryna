@@ -211,7 +211,7 @@ async function renderOrder(orderId: string) {
     '-c:a',
     'aac',
     '-t',
-    '35',
+    String(plan.duration),
     '-y',
     outputPath,
   ]
