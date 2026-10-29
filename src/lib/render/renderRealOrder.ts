@@ -12,6 +12,7 @@ const execFileAsync = promisify(execFile)
 const FFMPEG_PATH = '/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg'
 const MEDIA_BUCKET = 'greeting-media'
 const RENDERS_BUCKET = 'greeting-renders'
+const TEMPLATES_BUCKET = 'greeting-templates'
 
 type GreetingOrder = {
   id: string
@@ -48,6 +49,31 @@ async function getOrder(orderId: string): Promise<GreetingOrder> {
   }
 
   return data as GreetingOrder
+}
+
+async function downloadTemplateMaster(
+  orderId: string,
+  storagePath: string
+) {
+  const { supabaseAdmin } = await import('../supabaseAdmin')
+
+  const { data, error } = await supabaseAdmin.storage
+    .from(TEMPLATES_BUCKET)
+    .download(storagePath)
+
+  if (error) {
+    throw new Error(`Failed to download template master: ${error.message}`)
+  }
+
+  const tempDir = path.join('tmp', 'render', orderId)
+  await fs.mkdir(tempDir, { recursive: true })
+
+  const localPath = path.join(tempDir, 'master.mp4')
+  const buffer = Buffer.from(await data.arrayBuffer())
+
+  await fs.writeFile(localPath, buffer)
+
+  return localPath
 }
 
 async function downloadMedia(
@@ -107,13 +133,17 @@ async function renderOrder(orderId: string) {
   const localMedia = await downloadMedia(order.id, order.media || {})
 
   const plan = buildRenderPlan(order)
+  const localMasterVideo = await downloadTemplateMaster(
+    order.id,
+    plan.masterVideo
+  )
 
   await setRenderStatus(order.id, 'rendering')
   await fs.mkdir('renders', { recursive: true })
 
   const outputPath = path.join('renders', `${order.id}.mp4`)
 
-  const ffmpegInputs: string[] = ['-i', plan.masterVideo]
+  const ffmpegInputs: string[] = ['-i', localMasterVideo]
   const filterParts: string[] = []
 
   let currentVideoLabel = '[0:v]'

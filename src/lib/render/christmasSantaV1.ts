@@ -5,7 +5,7 @@ export const christmasSantaV1: RenderTemplate = {
   automationKey: 'christmas-santa-v1',
   name: 'Christmas Santa V1',
 
-  masterVideo: 'templates/christmas-santa-v1/master.mp4',
+  masterVideo: 'christmas-santa-v1/master.mp4',
 
   width: 1920,
   height: 1080,
