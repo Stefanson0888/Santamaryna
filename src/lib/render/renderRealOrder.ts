@@ -9,7 +9,8 @@ loadEnvConfig(process.cwd())
 
 const execFileAsync = promisify(execFile)
 
-const FFMPEG_PATH = '/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg'
+const FFMPEG_PATH =
+  process.env.FFMPEG_PATH || '/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg'
 const MEDIA_BUCKET = 'greeting-media'
 const RENDERS_BUCKET = 'greeting-renders'
 const TEMPLATES_BUCKET = 'greeting-templates'
