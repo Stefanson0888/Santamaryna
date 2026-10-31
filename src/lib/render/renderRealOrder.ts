@@ -4,7 +4,6 @@ import os from 'node:os'
 import { execFile } from 'node:child_process'
 import { promisify } from 'node:util'
 import { loadEnvConfig } from '@next/env'
-import ffmpegStatic from 'ffmpeg-static'
 import { buildRenderPlan } from './buildRenderPlan'
 
 loadEnvConfig(process.cwd())
@@ -13,8 +12,7 @@ const execFileAsync = promisify(execFile)
 
 const FFMPEG_PATH =
   process.env.FFMPEG_PATH ||
-  ffmpegStatic ||
-  '/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg'
+  path.join(process.cwd(), 'node_modules', 'ffmpeg-static', 'ffmpeg')
 
 const RENDER_FONT_PATH =
   process.env.RENDER_FONT_PATH ||
@@ -137,7 +135,7 @@ async function setRenderStatus(
   }
 }
 
-async function renderOrder(orderId: string) {
+export async function renderOrder(orderId: string) {
   const order = await getOrder(orderId)
   const localMedia = await downloadMedia(order.id, order.media || {})
 
@@ -291,25 +289,25 @@ async function renderOrder(orderId: string) {
   console.log(`Uploaded: ${RENDERS_BUCKET}/${storagePath}`)
 }
 
-const orderId = process.argv[2]
+if (process.argv[1]?.endsWith('renderRealOrder.ts')) {
+  const orderId = process.argv[2]
 
-if (!orderId) {
-  console.error(
-    'Usage: npx tsx src/lib/render/renderRealOrder.ts <order-id>'
-  )
-  process.exit(1)
-}
+  if (!orderId) {
+    console.error(
+      'Usage: npx tsx src/lib/render/renderRealOrder.ts <order-id>'
+    )
+    process.exit(1)
+  }
 
-renderOrder(orderId).catch(async error => {
-  console.error(error)
+  renderOrder(orderId).catch(async error => {
+    console.error(error)
 
-  if (orderId) {
     try {
       await setRenderStatus(orderId, 'failed')
     } catch (statusError) {
       console.error('Could not set failed status:', statusError)
     }
-  }
 
-  process.exit(1)
-})
+    process.exit(1)
+  })
+}
