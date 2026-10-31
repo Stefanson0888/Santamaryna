@@ -1,8 +1,10 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import os from 'node:os'
 import { execFile } from 'node:child_process'
 import { promisify } from 'node:util'
 import { loadEnvConfig } from '@next/env'
+import ffmpegStatic from 'ffmpeg-static'
 import { buildRenderPlan } from './buildRenderPlan'
 
 loadEnvConfig(process.cwd())
@@ -10,7 +12,9 @@ loadEnvConfig(process.cwd())
 const execFileAsync = promisify(execFile)
 
 const FFMPEG_PATH =
-  process.env.FFMPEG_PATH || '/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg'
+  process.env.FFMPEG_PATH ||
+  ffmpegStatic ||
+  '/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg'
 
 const RENDER_FONT_PATH =
   process.env.RENDER_FONT_PATH ||
@@ -70,7 +74,7 @@ async function downloadTemplateMaster(
     throw new Error(`Failed to download template master: ${error.message}`)
   }
 
-  const tempDir = path.join('tmp', 'render', orderId)
+  const tempDir = path.join(os.tmpdir(), 'santamaryna-render', orderId)
   await fs.mkdir(tempDir, { recursive: true })
 
   const localPath = path.join(tempDir, 'master.mp4')
@@ -87,7 +91,7 @@ async function downloadMedia(
 ) {
   const { supabaseAdmin } = await import('../supabaseAdmin')
 
-  const tempDir = path.join('tmp', 'render', orderId)
+  const tempDir = path.join(os.tmpdir(), 'santamaryna-render', orderId)
   await fs.mkdir(tempDir, { recursive: true })
 
   const localMedia: Record<string, string> = {}
@@ -144,9 +148,14 @@ async function renderOrder(orderId: string) {
   )
 
   await setRenderStatus(order.id, 'rendering')
-  await fs.mkdir('renders', { recursive: true })
+  const outputDir = path.join(
+    os.tmpdir(),
+    'santamaryna-render',
+    order.id
+  )
+  await fs.mkdir(outputDir, { recursive: true })
 
-  const outputPath = path.join('renders', `${order.id}.mp4`)
+  const outputPath = path.join(outputDir, 'final.mp4')
 
   const ffmpegInputs: string[] = ['-i', localMasterVideo]
   const filterParts: string[] = []
